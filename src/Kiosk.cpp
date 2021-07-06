@@ -110,27 +110,27 @@ void Kiosk::goToUrl(const QUrl &url)
 void Kiosk::runJavascript(const QString &program)
 {
     // view_->page()->runJavaScript(program);
+    QMetaObject::invokeMethod(view_, "runJavaScript", Q_ARG(QString, program));
 }
 
 void Kiosk::reload()
 {
     QMetaObject::invokeMethod(view_, "reload");
-    // view_->reload();
 }
 
 void Kiosk::goBack()
 {
-    // view_->back();
+    QMetaObject::invokeMethod(view_, "goBack");
 }
 
 void Kiosk::goForward()
 {
-    // view_->forward();
+    QMetaObject::invokeMethod(view_, "goForward");
 }
 
 void Kiosk::stopLoading()
 {
-    // view_->stop();
+    QMetaObject::invokeMethod(view_, "stop");
 }
 
 void Kiosk::handleRequest(const KioskMessage &message)
