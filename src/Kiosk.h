@@ -34,6 +34,7 @@ public slots:
     void goBack();
     void goForward();
     void stopLoading();
+    void setContextMenuPolicy(const Qt::ContextMenuPolicy policy);
 
 protected:
     bool eventFilter(QObject *object, QEvent *event);

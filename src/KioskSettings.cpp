@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QFileInfo>
 #include <QMetaEnum> 
+#include <QDebug> 
 
 static bool toBool(const QString &v)
 {
@@ -102,4 +103,5 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
     const char *context_menu_str = parser.value("context_menu").toLocal8Bit().data();
     QMetaEnum metaContextMenu = QMetaEnum::fromType<Qt::ContextMenuPolicy>();
     contextMenu = Qt::ContextMenuPolicy(metaContextMenu.keyToValue(context_menu_str));
+    qDebug() << "Context Menu: " << contextMenu << "\n";
 }

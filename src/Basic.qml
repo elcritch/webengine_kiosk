@@ -16,70 +16,73 @@ Window {
         anchors.centerIn: parent
         rotation: Screen.width < Screen.height ? 90 : 0
 
+        WebEngineView {
+            id: webview
+            anchors.fill: parent
+            url: 'https://www.google.com'
+            objectName: "web"
 
-    WebEngineView {
-        id: webview
-        anchors.fill: parent
-        url: 'https://www.google.com'
-        objectName: "web"
+            Component.onCompleted: console.log("From QML: ",this) // prints the root object
 
-        Component.onCompleted: console.log("From QML: ",this) // prints the root object
-    } 
-
-    Rectangle {
-        height: 10
-        width: 10
-        color: "green"
-    }
-
-    // Component.onCompleted: {
-        // VirtualKeyboardSettings.fullScreenMode = true;
-    // }
-
-    InputPanel {
-        id: inputPanel
-        z: 89
-        y: appContainer.height
-        anchors.left: parent.left
-        anchors.right: parent.right
-        states: State {
-            name: "visible"
-            /*  The visibility of the InputPanel can be bound to the Qt.inputMethod.visible property,
-                but then the handwriting input panel and the keyboard input panel can be visible
-                at the same time. Here the visibility is bound to InputPanel.active property instead,
-                which allows the handwriting panel to control the visibility when necessary.
-            */
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: appContainer.height - inputPanel.height
+            onContextMenuRequested: {
+                request.accepted = true
             }
+        } 
+
+        Rectangle {
+            height: 10
+            width: 10
+            color: "green"
         }
-        transitions: Transition {
-            id: inputPanelTransition
-            from: ""
-            to: "visible"
-            reversible: true
-            enabled: !VirtualKeyboardSettings.fullScreenMode
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
+
+        // Component.onCompleted: {
+            // VirtualKeyboardSettings.fullScreenMode = true;
+        // }
+
+        InputPanel {
+            id: inputPanel
+            z: 89
+            y: appContainer.height
+            anchors.left: parent.left
+            anchors.right: parent.right
+            states: State {
+                name: "visible"
+                /*  The visibility of the InputPanel can be bound to the Qt.inputMethod.visible property,
+                    but then the handwriting input panel and the keyboard input panel can be visible
+                    at the same time. Here the visibility is bound to InputPanel.active property instead,
+                    which allows the handwriting panel to control the visibility when necessary.
+                */
+                when: inputPanel.active
+                PropertyChanges {
+                    target: inputPanel
+                    y: appContainer.height - inputPanel.height
                 }
             }
+            transitions: Transition {
+                id: inputPanelTransition
+                from: ""
+                to: "visible"
+                reversible: true
+                enabled: !VirtualKeyboardSettings.fullScreenMode
+                ParallelAnimation {
+                    NumberAnimation {
+                        properties: "y"
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+            Binding {
+                target: InputContext
+                property: "animating"
+                value: inputPanelTransition.running
+            }
         }
-        Binding {
-            target: InputContext
-            property: "animating"
-            value: inputPanelTransition.running
-        }
-    }
 
-    Binding {
-        target: VirtualKeyboardSettings
-        property: "fullScreenMode"
-        value: appContainer.height > 0 && (appContainer.width / appContainer.height) > (16.0 / 9.0)
-    }
+        Binding {
+            target: VirtualKeyboardSettings
+            property: "fullScreenMode"
+            value: appContainer.height > 0 && (appContainer.width / appContainer.height) > (16.0 / 9.0)
+        }
     }
 }

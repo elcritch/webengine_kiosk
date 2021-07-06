@@ -71,6 +71,7 @@ void Kiosk::setView(QQuickItem *exview) {
     // Start the browser up
     view_ = exview;
     qDebug() << "SET VIEW: " << view_ << " with: " << exview << "\n";
+    setContextMenuPolicy(settings_->contextMenu);
     // view_->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, settings_->javascriptEnabled);
     // view_->settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, settings_->javascriptCanOpenWindows);
 
@@ -126,6 +127,12 @@ void Kiosk::goForward()
 void Kiosk::stopLoading()
 {
     QMetaObject::invokeMethod(view_, "stop");
+}
+
+void Kiosk::setContextMenuPolicy(const Qt::ContextMenuPolicy policy)
+{
+    QMetaObject::invokeMethod(view_, "setContextMenuPolicy", Q_ARG(Qt::ContextMenuPolicy, policy));
+    // view_->setContexMenuPolicy(policy);
 }
 
 void Kiosk::handleRequest(const KioskMessage &message)
