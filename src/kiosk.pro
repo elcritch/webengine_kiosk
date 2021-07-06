@@ -1,4 +1,4 @@
-QT       = core gui network widgets multimedia webenginewidgets
+QT       = core gui network widgets multimedia webenginewidgets virtualkeyboard
 
 CONFIG += console link_pkgconfig c++11
 CONFIG -= app_bundle
