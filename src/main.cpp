@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
             run_as_root = (strcmp(argv[i + 1], "true") == 0);
             i++;
         } else if(strcmp(argv[i], "--virtualkeyboard") == 0) {
-            enable_virtualkeyboard = true
+            enable_virtualkeyboard = true;
             i++;
         }
     }
