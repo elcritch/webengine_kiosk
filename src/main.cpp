@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/Basic.qml")));
-    engine.showFullScreen();    // here we show our view in fullscreen
+    // engine.showFullScreen();    // here we show our view in fullscreen
 
     KioskSettings settings(app);
 

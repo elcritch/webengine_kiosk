@@ -19,7 +19,7 @@ defmodule WebengineKiosk.Options do
     :hide_cursor,
     :javascript,
     :javascript_can_open_windows,
-    :debug_menu,
+    :debug_keys,
     :fullscreen,
     :width,
     :height,
