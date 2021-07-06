@@ -1,4 +1,4 @@
-QT       = core gui network widgets multimedia webenginewidgets virtualkeyboard qml quick
+QT       = core gui network widgets multimedia webenginewidgets webengine virtualkeyboard qml quick
 
 CONFIG += console link_pkgconfig c++11
 CONFIG -= app_bundle

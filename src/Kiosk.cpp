@@ -1,5 +1,4 @@
 #include "Kiosk.h"
-#include "KioskWindow.h"
 #include "KioskView.h"
 #include "KioskProgress.h"
 #include "ElixirComs.h"
@@ -23,10 +22,10 @@ Kiosk::Kiosk(const KioskSettings *settings, QObject *parent) :
     theGoodWindow_(nullptr)
 {
     // Set up the UI
-    window_ = new KioskWindow(this, settings);
-    connect(window_, SIGNAL(wakeup()), SLOT(handleWakeup()));
+    // window_ = new KioskWindow(this, settings);
+    // connect(window_, SIGNAL(wakeup()), SLOT(handleWakeup()));
 
-    window_->setGeometry(calculateWindowRect());
+    // window_->setGeometry(calculateWindowRect());
 
     player_ = settings->soundsEnabled ? new KioskSounds(this) : nullptr;
 
@@ -62,37 +61,43 @@ void Kiosk::init()
     stderrPipe_ = new StderrPipe(this);
     connect(stderrPipe_, SIGNAL(inputReceived(QByteArray)), SLOT(handleStderr(QByteArray)));
 
+}
+
+void Kiosk::setView(QWebEngineView *view) {
     // Start the browser up
-    view_ = new KioskView(settings_, window_);
-    view_->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, settings_->javascriptEnabled);
-    view_->settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, settings_->javascriptCanOpenWindows);
+    view_ = view;
+    // view_->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, settings_->javascriptEnabled);
+    // view_->settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, settings_->javascriptCanOpenWindows);
 
     // Set elixir channel
-    elixirChannel_ = new ElixirJsChannel();
-    webChannel_ = new QWebChannel(this);
-    webChannel_->registerObject("elixirJsChannel", elixirChannel_);
-    view_->page()->setWebChannel(webChannel_);
+    // elixirChannel_ = new ElixirJsChannel();
+    // webChannel_ = new QWebChannel(this);
+    // webChannel_->registerObject("elixirJsChannel", elixirChannel_);
+    // view_->page()->setWebChannel(webChannel_);
 
-    connect(view_, SIGNAL(loadStarted()), SLOT(startLoading()));
-    connect(view_, SIGNAL(urlChanged(const QUrl &)), SLOT(urlChanged(const QUrl &)));
-    connect(view_, SIGNAL(loadProgress(int)), SLOT(setProgress(int)));
-    connect(view_, SIGNAL(loadFinished(bool)), SLOT(finishLoading()));    
-    connect(view_, SIGNAL(renderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus,int)), SLOT(handleRenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus,int)));
+    // connect(view_, SIGNAL(loadStarted()), SLOT(startLoading()));
+    // connect(view_, SIGNAL(urlChanged(const QUrl &)), SLOT(urlChanged(const QUrl &)));
+    // connect(view_, SIGNAL(loadProgress(int)), SLOT(setProgress(int)));
+    // connect(view_, SIGNAL(loadFinished(bool)), SLOT(finishLoading()));    
+    // connect(view_, SIGNAL(renderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus,int)), SLOT(handleRenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus,int)));
 
-    connect(elixirChannel_, SIGNAL(received(const QString &)), SLOT(elixirMessageReceived(const QString &)));
+    // connect(elixirChannel_, SIGNAL(received(const QString &)), SLOT(elixirMessageReceived(const QString &)));
 
-    window_->setView(view_);
-    view_->load(settings_->homepage);
+    // window_->setView(view_);
+    // view_->load(settings_->homepage);
 
-    if (settings_->fullscreen)
-        window_->showFullScreen();
-    else
-        window_->show();
+    // if (settings_->fullscreen)
+        // window_->showFullScreen();
+    // else
+        // window_->show();
 }
 
 void Kiosk::goToUrl(const QUrl &url)
 {
-    view_->load(url);
+    qDebug() << "Goto URL: " << url;
+    qDebug() << "Win obj: " << view_->metaObject()->className();  
+
+    // view_->page()->load(url);
 }
 
 void Kiosk::runJavascript(const QString &program)
@@ -132,7 +137,7 @@ void Kiosk::handleRequest(const KioskMessage &message)
         break;
 
     case KioskMessage::Blank:
-        window_->setBrowserVisible(message.payload().at(0) == 0);
+        // window_->setBrowserVisible(message.payload().at(0) == 0);
         break;
 
     case KioskMessage::Reload:
@@ -197,19 +202,19 @@ bool Kiosk::eventFilter(QObject *object, QEvent *event)
     Q_UNUSED(object);
 
     if (object->isWindowType() && isInputEvent(event)) {
-        QQuickWindow *qwin = dynamic_cast<QQuickWindow *>(object);
-        if (qwin) {
-            // All events are supposed to go to the QWidgetWindow.
-            // However, on the Raspberry Pi, the order of the
-            // QWidgetWindow and QQuickWindow gets swapped. Oddly
-            // enough, this can be reliably reproduced when loading
-            // pages with networking, but no Internet. Raising
-            // the QWidgetWindow doesn't change which one gets
-            // events. Therefore, if the QQuickWindow does get
-            // an event, forward it over to the QWidgetWindow.
-            if (theGoodWindow_)
-                qApp->sendEvent(theGoodWindow_, event);
-        }
+        // QQuickWindow *qwin = dynamic_cast<QQuickWindow *>(object);
+        // if (qwin) {
+        //     // All events are supposed to go to the QWidgetWindow.
+        //     // However, on the Raspberry Pi, the order of the
+        //     // QWidgetWindow and QQuickWindow gets swapped. Oddly
+        //     // enough, this can be reliably reproduced when loading
+        //     // pages with networking, but no Internet. Raising
+        //     // the QWidgetWindow doesn't change which one gets
+        //     // events. Therefore, if the QQuickWindow does get
+        //     // an event, forward it over to the QWidgetWindow.
+        //     if (theGoodWindow_)
+        //         qApp->sendEvent(theGoodWindow_, event);
+        // }
     }
 
     // See https://bugreports.qt.io/browse/QTBUG-43602 for mouse events
@@ -229,8 +234,8 @@ bool Kiosk::eventFilter(QObject *object, QEvent *event)
 
 void Kiosk::startLoading()
 {
-    if (settings_->progress)
-        window_->showProgress(0);
+    // if (settings_->progress)
+        // window_->showProgress(0);
 
     coms_->send(KioskMessage::loadingPageMessage());
     loadingPage_ = true;
@@ -238,8 +243,8 @@ void Kiosk::startLoading()
 
 void Kiosk::setProgress(int p)
 {
-    if (settings_->progress)
-        window_->showProgress(p);
+    // if (settings_->progress)
+        // window_->showProgress(p);
 
     coms_->send(KioskMessage::progressMessage(p));
 
@@ -249,8 +254,8 @@ void Kiosk::setProgress(int p)
 
 void Kiosk::finishLoading()
 {
-    if (settings_->progress)
-        window_->hideProgress();
+    // if (settings_->progress)
+        // window_->hideProgress();
 
     if (loadingPage_) {
         coms_->send(KioskMessage::finishedLoadingPageMessage());
@@ -258,23 +263,23 @@ void Kiosk::finishLoading()
 
         if (showPageWhenDone_) {
             // Let the event loop settle before showing the browser
-            QTimer::singleShot(100, window_, SLOT(showBrowser()));
+            // QTimer::singleShot(100, window_, SLOT(showBrowser()));
         }
     }
 
     // Force focus just in case it was lost somehow.
-    QApplication::setActiveWindow(window_);
-    window_->focusWidget();
+    // QApplication::setActiveWindow(window_);
+    // window_->focusWidget();
 
     // Capture the QWidgetWindow reference for the Raspberry Pi
     // input event workaround. See event() function for details.
-    if (!theGoodWindow_) {
-        // QWidgetWindow is private so verify that it's not a QQuickWindow which
-        // isn't private and is the only alternative (to my knowledge).
-        QWindow *win = qApp->focusWindow();
-        if (dynamic_cast<QQuickWindow *>(win) == nullptr)
-            theGoodWindow_ = win;
-    }
+    // if (!theGoodWindow_) {
+    //     // QWidgetWindow is private so verify that it's not a QQuickWindow which
+    //     // isn't private and is the only alternative (to my knowledge).
+    //     QWindow *win = qApp->focusWindow();
+    //     if (dynamic_cast<QQuickWindow *>(win) == nullptr)
+    //         theGoodWindow_ = win;
+    // }
 }
 
 void Kiosk::handleWakeup()
@@ -309,20 +314,20 @@ void Kiosk::elixirMessageReceived(const QString &messageStr)
 
 QRect Kiosk::calculateWindowRect() const
 {
-    QList<QScreen*> screens = QApplication::screens();
-    int screenToUse = 0;
-    if (settings_->monitor >= 0 && settings_->monitor < screens.length())
-        screenToUse = settings_->monitor;
+    // QList<QScreen*> screens = QApplication::screens();
+    // int screenToUse = 0;
+    // if (settings_->monitor >= 0 && settings_->monitor < screens.length())
+    //     screenToUse = settings_->monitor;
 
-    QRect screenRect = screens.at(screenToUse)->geometry();
+    // QRect screenRect = screens.at(screenToUse)->geometry();
 
-    if (settings_->fullscreen) {
-        return screenRect;
-    } else {
-        int windowWidth = qMax(320, qMin(screenRect.width(), settings_->width));
-        int windowHeight = qMax(240, qMin(screenRect.height(), settings_->height));
-        int offsetX = (screenRect.width() - windowWidth) / 2;
-        int offsetY = (screenRect.height() - windowHeight) / 2;
-        return QRect(screenRect.x() + offsetX, screenRect.y() + offsetY, windowWidth, windowHeight);
-    }
+    // if (settings_->fullscreen) {
+    //     return screenRect;
+    // } else {
+    //     int windowWidth = qMax(320, qMin(screenRect.width(), settings_->width));
+    //     int windowHeight = qMax(240, qMin(screenRect.height(), settings_->height));
+    //     int offsetX = (screenRect.width() - windowWidth) / 2;
+    //     int offsetY = (screenRect.height() - windowHeight) / 2;
+    //     return QRect(screenRect.x() + offsetX, screenRect.y() + offsetY, windowWidth, windowHeight);
+    // }
 }

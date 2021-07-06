@@ -6,6 +6,11 @@
 #include <QGuiApplication>
 #include <QQmlEngine>
 #include <QQmlApplicationEngine>
+// #include <QtWebEngine>
+#include <QtWebEngine/qtwebengineglobal.h>
+#include <QtWebEngineWidgets/QWebEngineView>
+// #include <QtWebEngine/qquickwebenginescript.h>
+
 // #include <QtDeclarative/QDeclarativeView>
 
 #include <stdio.h>
@@ -199,23 +204,36 @@ int main(int argc, char *argv[])
     if (enable_virtualkeyboard)
         qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
-    QApplication app(argc, argv);
+
+    if (desired_gid || desired_uid)
+        checkPermissions();
+
+    // Start Application
+    QCoreApplication::setOrganizationName("QtExamples");
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QtWebEngine::initialize();
+    QGuiApplication app(argc, argv);
+
+    // QApplication app(argc, argv);
+    KioskSettings settings(app);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/Basic.qml")));
     // engine.showFullScreen();    // here we show our view in fullscreen
 
-    KioskSettings settings(app);
+    QObject *root = engine.rootObjects()[0];
+    QObject *webptr = root->findChild<QObject*>("web");
+    qDebug() << "From C++: webptr: " << webptr;
+    QWebEngineView *web;
+    web = qobject_cast<QWebEngineView *>(webptr);
+    qDebug() << "From C++: web: " << webptr;
+    // QtWebView *web = qobject_cast<QtWebView*>(webptr);
 
-    // Copy in the uid/gid settings for posterity.
-    settings.uid = desired_uid;
-    settings.gid = desired_gid;
-
-    if (desired_gid || desired_uid)
-        checkPermissions();
-
-    // Kiosk kiosk(&settings);
-    // kiosk.init();
+    Kiosk kiosk(&settings);
+    kiosk.init();
+    kiosk.setView(web);
+    // web->load(QUrl("https://www.duckduckgo.com"));
 
     return app.exec();
 }

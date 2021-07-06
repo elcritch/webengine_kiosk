@@ -21,6 +21,9 @@ Window {
         id: webview
         anchors.fill: parent
         url: 'https://www.google.com'
+        objectName: "web"
+
+        Component.onCompleted: console.log("From QML: ",this) // prints the root object
     } 
 
     Rectangle {

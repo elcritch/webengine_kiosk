@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QtWebEngineCore>
+#include <QtWebEngineWidgets/QWebEngineView>
+
 
 #include "KioskSettings.h"
 
@@ -23,7 +25,7 @@ public:
     explicit KioskWindow(Kiosk *kiosk, const KioskSettings *settings);
     ~KioskWindow();
 
-    void setView(KioskView *view);
+    void setView(QWebEngineView *view);
     void setBrowserVisible(bool enabled);
 
     void showProgress(int percent);
@@ -49,7 +51,7 @@ private:
 
     KioskProgress *progress_;
     Blanking *blank_;
-    KioskView *view_;
+    QWebEngineView *view_;
 
     bool showingBrowser_;
 };
