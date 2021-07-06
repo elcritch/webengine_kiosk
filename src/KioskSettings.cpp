@@ -45,6 +45,7 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
             {"blank_image", "An image to use when the screen should be blank", "path", ""},
             {"background_color", "The background color of the browser and blank screen (unless there's a blank_image)", "#RRGGBB or name", "white"},
             {"run_as_root", "Explicitly allow the kiosk to run as the root user", "bool", "false"},
+            {"virtualkeyboard", "Explicitly enable a virtual keyboard", "bool", "false"},
             {"http_accept_language", "Overrides the default Accept-Language", "language-locale", ""},
             {"http_user_agent", "Overrides the default User-Agent string", "string", ""}
         });
@@ -83,6 +84,7 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
     javascriptEnabled = toBool(parser.value("javascript"));
     javascriptCanOpenWindows = toBool(parser.value("javascript_can_open_windows"));
     debugKeysEnabled = toBool(parser.value("debug_keys"));
+    virtualkeyboardEnabled = toBool(parser.value("virtualkeyboard"));
     uid = 0; // Set in main.c
     gid = 0; // Set in main.c
     zoomFactor = parser.value("zoom_factor").toDouble();

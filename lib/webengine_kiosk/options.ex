@@ -39,9 +39,13 @@ defmodule WebengineKiosk.Options do
   Go through all of the arguments and check for bad ones.
   """
   def check_args(args) do
+
+    IO.inspect @all_options, label: :all_options
     case Enum.find(args, &invalid_arg?/1) do
       nil -> :ok
-      arg -> {:error, "Unknown option #{inspect(arg)}"}
+      arg ->
+        IO.inspect arg, label: :arg_all_options
+        {:error, "Unknown option #{inspect(arg)}"}
     end
   end
 

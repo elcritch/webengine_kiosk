@@ -38,6 +38,7 @@ struct KioskSettings
     bool javascriptEnabled;
     bool javascriptCanOpenWindows;
     bool debugKeysEnabled;
+    bool virtualkeyboardEnabled ;
 
     uid_t uid;
     gid_t gid;
