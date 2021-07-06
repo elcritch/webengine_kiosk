@@ -14,6 +14,7 @@
 
 #include <QtQml>
 #include <QtQml/QQmlProperty>
+#include <QtWebEngineWidgets/QWebEngineView>
 
 Kiosk::Kiosk(const KioskSettings *settings, QObject *parent) :
     QObject(parent),
@@ -113,6 +114,7 @@ void Kiosk::runJavascript(const QString &program)
 
 void Kiosk::reload()
 {
+    QMetaObject::invokeMethod(view_, "reload");
     // view_->reload();
 }
 
