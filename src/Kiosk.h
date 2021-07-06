@@ -6,6 +6,7 @@
 #include <QWebEnginePage>
 #include <QtWebEngineWidgets/QWebEngineView>
 // #include <QtWebEngine/qquickwebenginescript.h>
+#include <QtQuick/QQuickItem>
 
 class ElixirComs;
 class KioskMessage;
@@ -24,7 +25,7 @@ public:
 
     void init();
 
-    void setView(QWebEngineView *view);
+    void setView(QQuickItem *view);
 
 public slots:
     void goToUrl(const QUrl &url);
@@ -61,7 +62,8 @@ private:
     ElixirComs *coms_;
     StderrPipe *stderrPipe_;
 
-    QWebEngineView *view_;
+    // QWebEngineView *view_;
+    QQuickItem *view_;
 
     bool loadingPage_;
     bool showPageWhenDone_;

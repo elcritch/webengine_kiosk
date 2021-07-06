@@ -12,6 +12,9 @@
 #include <QMetaObject>
 #include <QMessageBox>
 
+#include <QtQml>
+#include <QtQml/QQmlProperty>
+
 Kiosk::Kiosk(const KioskSettings *settings, QObject *parent) :
     QObject(parent),
     settings_(settings),
@@ -63,9 +66,10 @@ void Kiosk::init()
 
 }
 
-void Kiosk::setView(QWebEngineView *view) {
+void Kiosk::setView(QQuickItem *exview) {
     // Start the browser up
-    view_ = view;
+    view_ = exview;
+    qDebug() << "SET VIEW: " << view_ << " with: " << exview << "\n";
     // view_->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, settings_->javascriptEnabled);
     // view_->settings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, settings_->javascriptCanOpenWindows);
 
@@ -92,41 +96,45 @@ void Kiosk::setView(QWebEngineView *view) {
         // window_->show();
 }
 
+#include <iostream>     // std::cin, std::cout
+
 void Kiosk::goToUrl(const QUrl &url)
 {
-    qDebug() << "Goto URL: " << url;
-    qDebug() << "Win obj: " << view_->metaObject()->className();  
+    qDebug() << "Goto URL: " << url << " with: " << view_;
 
+    QQmlProperty::write(view_, "url", url);
     // view_->page()->load(url);
 }
 
 void Kiosk::runJavascript(const QString &program)
 {
-    view_->page()->runJavaScript(program);
+    // view_->page()->runJavaScript(program);
 }
 
 void Kiosk::reload()
 {
-    view_->reload();
+    // view_->reload();
 }
 
 void Kiosk::goBack()
 {
-    view_->back();
+    // view_->back();
 }
 
 void Kiosk::goForward()
 {
-    view_->forward();
+    // view_->forward();
 }
 
 void Kiosk::stopLoading()
 {
-    view_->stop();
+    // view_->stop();
 }
 
 void Kiosk::handleRequest(const KioskMessage &message)
 {
+    qDebug() << "HANDLING REQUEST" << "\n";
+    
     switch (message.type()) {
     case KioskMessage::GoToURL:
         goToUrl(QUrl(QString::fromUtf8(message.payload())));
@@ -164,7 +172,7 @@ void Kiosk::handleRequest(const KioskMessage &message)
         else if (zoom > 10.0)
             zoom = 10.0;
 
-        view_->page()->setZoomFactor(zoom);
+        // view_->page()->setZoomFactor(zoom);
         break;
     }
 

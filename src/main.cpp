@@ -10,6 +10,9 @@
 #include <QtWebEngine/qtwebengineglobal.h>
 #include <QtWebEngineWidgets/QWebEngineView>
 // #include <QtWebEngine/qquickwebenginescript.h>
+#include <QtQml>
+#include <QtQml/QQmlProperty>
+#include <QtQuick/QQuickItem>
 
 // #include <QtDeclarative/QDeclarativeView>
 
@@ -209,6 +212,7 @@ int main(int argc, char *argv[])
         checkPermissions();
 
     // Start Application
+    // QApplication app(argc, argv);
     QCoreApplication::setOrganizationName("QtExamples");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -224,15 +228,16 @@ int main(int argc, char *argv[])
 
     QObject *root = engine.rootObjects()[0];
     QObject *webptr = root->findChild<QObject*>("web");
-    qDebug() << "From C++: webptr: " << webptr;
-    QWebEngineView *web;
-    web = qobject_cast<QWebEngineView *>(webptr);
-    qDebug() << "From C++: web: " << webptr;
+    qDebug() << "From C++: webptr: " << webptr << "\n";
+    QQuickItem *web;
+    web = qobject_cast<QQuickItem *>(webptr);
+    qDebug() << "From C++: web: " << web << "\n";
     // QtWebView *web = qobject_cast<QtWebView*>(webptr);
 
     Kiosk kiosk(&settings);
     kiosk.init();
     kiosk.setView(web);
+    qDebug() << "SET FROM web: " << web << "\n";
     // web->load(QUrl("https://www.duckduckgo.com"));
 
     return app.exec();
