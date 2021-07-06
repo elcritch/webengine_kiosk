@@ -88,8 +88,7 @@ void Kiosk::setView(QQuickItem *exview) {
 
     // connect(elixirChannel_, SIGNAL(received(const QString &)), SLOT(elixirMessageReceived(const QString &)));
 
-    // window_->setView(view_);
-    // view_->load(settings_->homepage);
+    goToUrl(settings_->homepage);
 
     // if (settings_->fullscreen)
         // window_->showFullScreen();
@@ -101,15 +100,11 @@ void Kiosk::setView(QQuickItem *exview) {
 
 void Kiosk::goToUrl(const QUrl &url)
 {
-    qDebug() << "Goto URL: " << url << " with: " << view_;
-
     QQmlProperty::write(view_, "url", url);
-    // view_->page()->load(url);
 }
 
 void Kiosk::runJavascript(const QString &program)
 {
-    // view_->page()->runJavaScript(program);
     QMetaObject::invokeMethod(view_, "runJavaScript", Q_ARG(QString, program));
 }
 
