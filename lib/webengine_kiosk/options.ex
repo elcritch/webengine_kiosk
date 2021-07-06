@@ -1,39 +1,43 @@
 defmodule WebengineKiosk.Options do
+
+  @moduledoc """
+    Options commented out currently don't work with QML based view
+  """
+
   @all_options [
     :clear_cache,
     :data_dir,
     :homepage,
     :monitor,
     :opengl,
-    :proxy_enable,
-    :proxy_system,
-    :proxy_host,
-    :proxy_port,
-    :proxy_username,
-    :proxy_password,
-    :stay_on_top,
-    :progress,
-    :sounds,
-    :window_clicked_sound,
-    :link_clicked_sound,
-    :hide_cursor,
+    # :proxy_enable,
+    # :proxy_system,
+    # :proxy_host,
+    # :proxy_port,
+    # :proxy_username,
+    # :proxy_password,
+    # :stay_on_top,
+    # :progress,
+    # :sounds,
+    # :window_clicked_sound,
+    # :link_clicked_sound,
+    # :hide_cursor,
     :javascript,
     :javascript_can_open_windows,
-    :debug_keys,
+    # :debug_keys,
     :fullscreen,
-    :width,
-    :height,
+    # :width,
+    # :height,
     :uid,
     :gid,
-    :blank_image,
-    :background_color,
+    # :blank_image,
+    # :background_color,
     :run_as_root,
     :virtualkeyboard,
-    :http_accept_language,
-    :http_user_agent
+    :context_menu,
+    # :http_accept_language,
+    # :http_user_agent
   ]
-
-  @moduledoc false
 
   @doc """
   Go through all of the arguments and check for bad ones.
