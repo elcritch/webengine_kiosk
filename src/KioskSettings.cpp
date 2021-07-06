@@ -2,6 +2,7 @@
 #include <QCommandLineParser>
 #include <QVariant>
 #include <QFileInfo>
+#include <QMetaEnum> 
 
 static bool toBool(const QString &v)
 {
@@ -47,7 +48,8 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
             {"run_as_root", "Explicitly allow the kiosk to run as the root user", "bool", "false"},
             {"virtualkeyboard", "Explicitly enable a virtual keyboard", "bool", "false"},
             {"http_accept_language", "Overrides the default Accept-Language", "language-locale", ""},
-            {"http_user_agent", "Overrides the default User-Agent string", "string", ""}
+            {"http_user_agent", "Overrides the default User-Agent string", "string", ""},
+            {"context_menu", "Set context menu policy", "string", "DefaultContextMenu"},
         });
     parser.addOptions(options);
     parser.process(app);
@@ -96,4 +98,8 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
     backgroundColor = QColor(parser.value("background_color"));
     httpAcceptLanguage = parser.value("http_accept_language");
     httpUserAgent = parser.value("http_user_agent");
+
+    const char *context_menu_str = parser.value("context_menu").toLocal8Bit().data();
+    QMetaEnum metaContextMenu = QMetaEnum::fromType<Qt::ContextMenuPolicy>();
+    contextMenu = Qt::ContextMenuPolicy(metaContextMenu.keyToValue(context_menu_str));
 }

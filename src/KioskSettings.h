@@ -49,6 +49,8 @@ struct KioskSettings
     QColor backgroundColor;
     QString httpAcceptLanguage;
     QString httpUserAgent;
+
+    Qt::ContextMenuPolicy contextMenu;
 };
 
 #endif // KIOSKSETTINGS_H

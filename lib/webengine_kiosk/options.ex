@@ -71,6 +71,7 @@ defmodule WebengineKiosk.Options do
     [
       homepage: "file://" <> homepage_file,
       fullscreen: true,
+      virtualkeyboard: true, # default qml assumes virtualkeyboard is loaded
       background_color: "black"
     ]
   end
