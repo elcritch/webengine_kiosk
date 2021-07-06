@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
     uid_t desired_uid = 0;
     const char *desired_user = nullptr;
     bool run_as_root = false;
+    bool enable_virtualkeyboard = false;
 
     for (int i = 1; i < argc - 1; i++) {
         if (strcmp(argv[i], "--gid") == 0) {
@@ -142,6 +143,9 @@ int main(int argc, char *argv[])
             i++;
         } else if(strcmp(argv[i], "--run_as_root") == 0) {
             run_as_root = (strcmp(argv[i + 1], "true") == 0);
+            i++;
+        } else if(strcmp(argv[i], "--virtualkeyboard") == 0) {
+            enable_virtualkeyboard = true
             i++;
         }
     }
@@ -185,6 +189,9 @@ int main(int argc, char *argv[])
 
     if (desired_uid > 0 && setuid(desired_uid) < 0)
         kiosk_errx(EXIT_FAILURE, "setuid(%d) failed", desired_uid);
+
+    if (enable_virtualkeyboard)
+        qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
     QApplication app(argc, argv);
     KioskSettings settings(app);

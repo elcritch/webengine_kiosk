@@ -28,6 +28,7 @@ defmodule WebengineKiosk.Options do
     :blank_image,
     :background_color,
     :run_as_root,
+    :virtualkeyboard,
     :http_accept_language,
     :http_user_agent
   ]
