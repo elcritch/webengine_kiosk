@@ -1,10 +1,13 @@
-QT       = core gui network widgets multimedia webenginewidgets virtualkeyboard
+QT       = core gui network widgets multimedia webenginewidgets virtualkeyboard qml quick
 
 CONFIG += console link_pkgconfig c++11
 CONFIG -= app_bundle
 
 TARGET = kiosk
 TEMPLATE = app
+
+OTHER_FILES += \
+    Basic.qml 
 
 SOURCES += main.cpp\
     ElixirJsChannel.cpp \

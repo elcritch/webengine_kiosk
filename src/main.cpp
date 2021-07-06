@@ -2,6 +2,12 @@
 #include <QStandardPaths>
 #include <QDir>
 
+#include <QQuickView>
+#include <QGuiApplication>
+#include <QQmlEngine>
+#include <QQmlApplicationEngine>
+// #include <QtDeclarative/QDeclarativeView>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -194,6 +200,11 @@ int main(int argc, char *argv[])
         qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
     QApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/Basic.qml")));
+    engine.showFullScreen();    // here we show our view in fullscreen
+
     KioskSettings settings(app);
 
     // Copy in the uid/gid settings for posterity.
@@ -203,8 +214,8 @@ int main(int argc, char *argv[])
     if (desired_gid || desired_uid)
         checkPermissions();
 
-    Kiosk kiosk(&settings);
-    kiosk.init();
+    // Kiosk kiosk(&settings);
+    // kiosk.init();
 
     return app.exec();
 }
