@@ -187,25 +187,26 @@ void Kiosk::handleRequest(const KioskMessage &message)
 static bool isInputEvent(QEvent *event)
 {
     switch (event->type()) {
-    case QEvent::TabletPress:
-    case QEvent::TabletRelease:
-    case QEvent::TabletMove:
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseMove:
-    case QEvent::TouchBegin:
-    case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
-    case QEvent::TouchCancel:
-    case QEvent::ContextMenu:
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-    case QEvent::Wheel:
-        qDebug() << "input event: " << event->type();
-        return true;
-    default:
-        return false;
+        case QEvent::TabletPress:
+        case QEvent::TabletRelease:
+        case QEvent::TabletMove:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseMove:
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchEnd:
+        case QEvent::TouchCancel:
+        case QEvent::ContextMenu:
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+        case QEvent::Wheel:
+            qDebug() << "input event: " << event->type();
+            return true;
+        default:
+            qDebug() << "unknown input event: " << event->type();
+            return false;
     }
 }
 
