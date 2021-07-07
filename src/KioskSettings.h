@@ -50,7 +50,7 @@ struct KioskSettings
     QString httpAcceptLanguage;
     QString httpUserAgent;
 
-    Qt::ContextMenuPolicy contextMenu;
+    bool contextMenu;
 };
 
 #endif // KIOSKSETTINGS_H

@@ -129,10 +129,9 @@ void Kiosk::stopLoading()
     QMetaObject::invokeMethod(view_, "stop");
 }
 
-void Kiosk::setContextMenuPolicy(const Qt::ContextMenuPolicy policy)
+void Kiosk::setContextMenuPolicy(bool enable)
 {
-    QMetaObject::invokeMethod(view_, "setContextMenuPolicy", Q_ARG(Qt::ContextMenuPolicy, policy));
-    // view_->setContexMenuPolicy(policy);
+    QQmlProperty::write(view_, "enableContextMenu", enable);
 }
 
 void Kiosk::handleRequest(const KioskMessage &message)
