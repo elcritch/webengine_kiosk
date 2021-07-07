@@ -1,8 +1,14 @@
 defmodule WebengineKiosk.Options do
-
   @moduledoc """
     Options commented out currently don't work with QML based view
   """
+
+  @system_options [
+    :data_dir,
+    :platform_udev,
+    :platform_shared_memory,
+    :platform_cache_dir
+  ]
 
   @all_options [
     :clear_cache,
@@ -34,7 +40,7 @@ defmodule WebengineKiosk.Options do
     # :background_color,
     :run_as_root,
     :virtualkeyboard,
-    :context_menu,
+    :context_menu
     # :http_accept_language,
     # :http_user_agent
   ]
@@ -43,12 +49,14 @@ defmodule WebengineKiosk.Options do
   Go through all of the arguments and check for bad ones.
   """
   def check_args(args) do
+    IO.inspect(@all_options, label: :all_options)
 
-    IO.inspect @all_options, label: :all_options
     case Enum.find(args, &invalid_arg?/1) do
-      nil -> :ok
+      nil ->
+        :ok
+
       arg ->
-        IO.inspect arg, label: :arg_all_options
+        IO.inspect(arg, label: :arg_all_options)
         {:error, "Unknown option #{inspect(arg)}"}
     end
   end
@@ -61,7 +69,13 @@ defmodule WebengineKiosk.Options do
   Add the default options to the user-supplied list.
   """
   def add_defaults(args) do
-    Keyword.merge(defaults(), args)
+    args
+    |> Keyword.merge(defaults())
+    |> Keyword.drop(@system_options)
+  end
+
+  def system_args(args) do
+    args |> Keyword.take(args)
   end
 
   defp defaults() do
@@ -71,7 +85,8 @@ defmodule WebengineKiosk.Options do
     [
       homepage: "file://" <> homepage_file,
       fullscreen: true,
-      virtualkeyboard: true, # default qml assumes virtualkeyboard is loaded
+      # default qml assumes virtualkeyboard is loaded
+      virtualkeyboard: true,
       background_color: "black"
     ]
   end

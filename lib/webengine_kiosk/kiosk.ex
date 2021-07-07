@@ -23,14 +23,20 @@ defmodule WebengineKiosk.Kiosk do
       raise "Kiosk port missing"
     end
 
-    all_options = Options.add_defaults(args)
+    cmd_options = Options.add_defaults(args)
+    system_args = Options.system_args(args)
 
     cmd_args =
-      all_options
+      cmd_options
       |> Enum.flat_map(fn {key, value} -> ["--#{key}", to_string(value)] end)
 
-    set_permissions(all_options)
-    homepage = Keyword.get(all_options, :homepage)
+    # System setup
+    system_args
+    |> set_permissions!()
+    |> platform_init_events!()
+    |> set_xdg_cache!()
+
+    homepage = Keyword.get(cmd_options, :homepage)
 
     port =
       Port.open({:spawn_executable, cmd}, [
@@ -42,7 +48,7 @@ defmodule WebengineKiosk.Kiosk do
         :exit_status
       ])
 
-    {:ok, %{port: port, homepage: homepage, parent: parent}}
+    {:ok, %{port: port, homepage: homepage, parent: parent, system_args: system_args}}
   end
 
   def handle_call(:go_home, _from, state) do
@@ -139,7 +145,53 @@ defmodule WebengineKiosk.Kiosk do
     send(state.port, {self(), {:command, message}})
   end
 
-  defp set_permissions(opts) do
+  defp platform_init_events!(opts) do
+    udev_opt = Keyword.get(opts, :platform_udev, false)
+
+    udev_init_delay_ms =
+      case udev_opt do
+        val when is_integer(val) -> udev_opt
+        _other -> 1_000
+      end
+
+    unless udev_opt == false do
+      # Initialize eudev
+      :os.cmd('udevd -d')
+      :os.cmd('udevadm trigger --type=subsystems --action=add')
+      :os.cmd('udevadm trigger --type=devices --action=add')
+      :os.cmd('udevadm settle --timeout=30')
+      Process.sleep(udev_init_delay_ms)
+    end
+
+    opts
+  end
+
+  def set_xdg_cache!(opts) do
+    if Keyword.get(opts, :platform_cache_dir, false) do
+      System.put_env("XDG_RUNTIME_DIR", "/root/cache/")
+    end
+
+    opts
+  end
+
+  def fix_shared_memory!(opts) do
+    shared_memory_opt = Keyword.get(opts, :platform_shared_memory, false)
+
+    if shared_memory_opt do
+      # webengine (aka chromium) uses /dev/shm for shared memory.
+      # On Nerves it maps to devtmpfs which is waay too small.
+      # Haven't found an option to set the shm file, so we get this hack:
+      File.rm_rf("/root/shm")
+      File.mkdir_p!("/root/shm")
+      File.rm_rf("/dev/shm")
+      File.ln_s!("/root/shm", "/dev/shm")
+      Process.sleep(100)
+    end
+
+    opts
+  end
+
+  defp set_permissions!(opts) do
     # Check if we are on a raspberry pi
     if File.exists?("/dev/vchiq") do
       File.chgrp("/dev/vchiq", 28)
@@ -153,6 +205,8 @@ defmodule WebengineKiosk.Kiosk do
         chown(data_dir, uid)
       end
     end
+
+    opts
   end
 
   defp chown(file, uid) when is_binary(uid) do

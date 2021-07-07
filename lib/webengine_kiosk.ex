@@ -127,12 +127,13 @@ defmodule WebengineKiosk do
   @spec disable_chrome_context(Supervisor.supervisor()) :: :ok | {:error, term}
   def disable_chrome_context(server) do
     js = """
-        window.oncontextmenu = function(event) {
-          event.preventDefault();
-          event.stopPropagation();
-          return false;
-        };
-      """
+      window.oncontextmenu = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      };
+    """
+
     run_javascript(server, js)
   end
 
