@@ -122,6 +122,21 @@ defmodule WebengineKiosk do
   def run_javascript(server, code), do: call_kiosk(server, {:run_javascript, code})
 
   @doc """
+  Run JavaScript to disable WebEngine's built in context menu.
+  """
+  @spec disable_chrome_context(Supervisor.supervisor()) :: :ok | {:error, term}
+  def disable_chrome_context(server) do
+    js = """
+        window.oncontextmenu = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        };
+      """
+    run_javascript(server, js)
+  end
+
+  @doc """
   Reload the current page.
   """
   @spec reload(Supervisor.supervisor()) :: :ok | {:error, term()}
