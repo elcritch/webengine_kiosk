@@ -28,6 +28,8 @@ public:
     void setView(QQuickItem *view);
 
 public slots:
+    void setBackgroundColor(const QColor color);
+    void onLoadingChanged(QObject *loadRequest);
     void goToUrl(const QUrl &url);
     void runJavascript(const QString &program);
     void reload();
@@ -43,17 +45,11 @@ private slots:
     void handleRequest(const KioskMessage &message);
 
     void urlChanged(const QUrl &);
-    void startLoading();
-    void setProgress(int p);
-    void finishLoading();
     void elixirMessageReceived(const QString &messageStr);
 
     void handleWakeup();
     void handleRenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus status, int exitCode);
     void handleStderr(const QByteArray &line);
-
-private:
-    QRect calculateWindowRect() const;
 
 private:
     QWebChannel *webChannel_;

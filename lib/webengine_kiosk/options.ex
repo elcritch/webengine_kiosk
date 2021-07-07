@@ -37,7 +37,7 @@ defmodule WebengineKiosk.Options do
     :uid,
     :gid,
     # :blank_image,
-    # :background_color,
+    :background_color,
     :run_as_root,
     :virtualkeyboard,
     :context_menu
