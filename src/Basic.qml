@@ -19,13 +19,16 @@ Window {
         WebEngineView {
             id: webview
             anchors.fill: parent
-            url: 'https://www.google.com'
+            url: 'about:blank'
             objectName: "web"
+
+            property bool enableContextMenu
 
             Component.onCompleted: console.log("From QML: ",this) // prints the root object
 
             onContextMenuRequested: {
-                request.accepted = true
+                if (!enableContextMenu)
+                    request.accepted = true
             }
         } 
 

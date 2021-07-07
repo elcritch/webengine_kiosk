@@ -100,8 +100,10 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
     httpAcceptLanguage = parser.value("http_accept_language");
     httpUserAgent = parser.value("http_user_agent");
 
-    const char *context_menu_str = parser.value("context_menu").toLocal8Bit().data();
+    const QString cm_qstr = parser.value("context_menu");
+    qDebug() << "Context Menu str: " << cm_qstr << "\n";
+    const char *cm_str  = cm_qstr.toLocal8Bit().data();
     QMetaEnum metaContextMenu = QMetaEnum::fromType<Qt::ContextMenuPolicy>();
-    contextMenu = Qt::ContextMenuPolicy(metaContextMenu.keyToValue(context_menu_str));
+    contextMenu = Qt::ContextMenuPolicy(metaContextMenu.keyToValue(cm_str));
     qDebug() << "Context Menu: " << contextMenu << "\n";
 }
