@@ -101,4 +101,5 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
     httpUserAgent = parser.value("http_user_agent");
 
     contextMenu = toBool(parser.value("context_menu"));
+    qDebug() << "contextMenu: " << contextMenu << "\n";
 }

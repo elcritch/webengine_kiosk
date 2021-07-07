@@ -202,6 +202,7 @@ static bool isInputEvent(QEvent *event)
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
     case QEvent::Wheel:
+        qDebug() << "input event: " << event->type();
         return true;
     default:
         return false;
