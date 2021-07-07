@@ -30,10 +30,13 @@ defmodule WebengineKiosk.Kiosk do
       cmd_options
       |> Enum.flat_map(fn {key, value} -> ["--#{key}", to_string(value)] end)
 
+    Logger.info("cmd_args: #{inspect cmd_args}")
+
     # System setup
     system_args
     |> set_permissions!()
     |> platform_init_events!()
+    |> fix_shared_memory!()
     |> set_xdg_cache!()
 
     homepage = Keyword.get(cmd_options, :homepage)
@@ -169,7 +172,7 @@ defmodule WebengineKiosk.Kiosk do
 
   def set_xdg_cache!(opts) do
     if Keyword.get(opts, :platform_cache_dir, false) do
-      Logger.debug("webengine_kiosk: XDG_RUNTIME_DIR ")
+      Logger.debug("webengine_kiosk: set_xdg_cache! ")
       System.put_env("XDG_RUNTIME_DIR", "/root/cache/")
     end
 
