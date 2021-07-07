@@ -10,7 +10,7 @@ defmodule WebengineKiosk.Options do
     :platform_cache_dir
   ]
 
-  @all_options [
+  @kiosk_options [
     :clear_cache,
     :data_dir,
     :homepage,
@@ -45,6 +45,8 @@ defmodule WebengineKiosk.Options do
     # :http_user_agent
   ]
 
+  @all_options @kiosk_options ++ @system_options
+
   @doc """
   Go through all of the arguments and check for bad ones.
   """
@@ -75,7 +77,7 @@ defmodule WebengineKiosk.Options do
   end
 
   def system_args(args) do
-    args |> Keyword.take(args)
+    args |> Keyword.take(@system_options)
   end
 
   defp defaults() do

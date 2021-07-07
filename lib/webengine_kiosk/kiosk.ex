@@ -156,6 +156,7 @@ defmodule WebengineKiosk.Kiosk do
 
     unless udev_opt == false do
       # Initialize eudev
+      Logger.debug("webengine_kiosk: platform_init_event! ")
       :os.cmd('udevd -d')
       :os.cmd('udevadm trigger --type=subsystems --action=add')
       :os.cmd('udevadm trigger --type=devices --action=add')
@@ -168,6 +169,7 @@ defmodule WebengineKiosk.Kiosk do
 
   def set_xdg_cache!(opts) do
     if Keyword.get(opts, :platform_cache_dir, false) do
+      Logger.debug("webengine_kiosk: XDG_RUNTIME_DIR ")
       System.put_env("XDG_RUNTIME_DIR", "/root/cache/")
     end
 
@@ -178,6 +180,7 @@ defmodule WebengineKiosk.Kiosk do
     shared_memory_opt = Keyword.get(opts, :platform_shared_memory, false)
 
     if shared_memory_opt do
+      Logger.debug("webengine_kiosk: fix_shared_memory! ")
       # webengine (aka chromium) uses /dev/shm for shared memory.
       # On Nerves it maps to devtmpfs which is waay too small.
       # Haven't found an option to set the shm file, so we get this hack:
