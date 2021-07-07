@@ -10,8 +10,6 @@
 
 class Kiosk;
 class KioskProgress;
-class KioskView;
-class Blanking;
 
 // NOTE: This is not a QMainWindow even though that would make a lot of sense.
 //       For unknown reasons, QMainWindow and QWebEngineView interact in some
@@ -50,7 +48,6 @@ private:
     const KioskSettings *settings_;
 
     KioskProgress *progress_;
-    Blanking *blank_;
     QWebEngineView *view_;
 
     bool showingBrowser_;

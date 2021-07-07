@@ -1,8 +1,6 @@
 #include "KioskWindow.h"
 #include "Kiosk.h"
 #include "KioskProgress.h"
-#include "KioskView.h"
-#include "Blanking.h"
 
 #include <QInputDialog>
 #include <QApplication>
@@ -17,12 +15,6 @@ KioskWindow::KioskWindow(Kiosk *kiosk, const KioskSettings *settings) :
 {
     setMinimumWidth(320);
     setMinimumHeight(200);
-
-    blank_ = new Blanking(this);
-    blank_->setStyleSheet(QString("background: %1").arg(settings->backgroundColor.name()));
-    if (!settings->blankImage.isEmpty())
-        blank_->setPixmap(settings->blankImage);
-    connect(blank_, SIGNAL(mousePressed()), SIGNAL(wakeup()));
 
     progress_ = new KioskProgress(this);
     progress_->hide();
@@ -73,15 +65,6 @@ KioskWindow::~KioskWindow()
 void KioskWindow::setView(QWebEngineView *view)
 {
     view_ = view;
-    // view_->setVisible(showingBrowser_);
-    // //view_->setParent(this);
-    // view_->stackUnder(progress_);
-    // QSize sz = size();
-    // view_->setGeometry(0, 0, sz.width(), sz.height());
-    // if (showingBrowser_) {
-    //     view_->setEnabled(true);
-    //     view_->setFocus();
-    // }
 }
 
 void KioskWindow::setBrowserVisible(bool enabled)
