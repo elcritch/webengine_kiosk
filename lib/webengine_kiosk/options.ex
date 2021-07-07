@@ -24,7 +24,7 @@ defmodule WebengineKiosk.Options do
     # :proxy_password,
     # :stay_on_top,
     # :progress,
-    # :sounds,
+    :sounds,
     # :window_clicked_sound,
     # :link_clicked_sound,
     # :hide_cursor,
