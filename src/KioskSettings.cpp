@@ -50,7 +50,7 @@ KioskSettings::KioskSettings(const QCoreApplication &app)
             {"virtualkeyboard", "Explicitly enable a virtual keyboard", "bool", "false"},
             {"http_accept_language", "Overrides the default Accept-Language", "language-locale", ""},
             {"http_user_agent", "Overrides the default User-Agent string", "string", ""},
-            {"context_menu", "Set context menu policy", "string", "DefaultContextMenu"},
+            {"context_menu", "Set context menu policy", "bool", "false"},
         });
     parser.addOptions(options);
     parser.process(app);
