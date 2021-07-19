@@ -1,5 +1,4 @@
 #include "Kiosk.h"
-#include "KioskView.h"
 #include "KioskProgress.h"
 #include "ElixirComs.h"
 #include "KioskSounds.h"

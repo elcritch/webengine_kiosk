@@ -32,16 +32,6 @@ Window {
             }
         } 
 
-        Rectangle {
-            height: 10
-            width: 10
-            color: "green"
-        }
-
-        // Component.onCompleted: {
-            // VirtualKeyboardSettings.fullScreenMode = true;
-        // }
-
         InputPanel {
             id: inputPanel
             z: 89
