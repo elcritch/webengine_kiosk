@@ -71,8 +71,8 @@ defmodule WebengineKiosk.Options do
   Add the default options to the user-supplied list.
   """
   def add_defaults(args) do
-    args
-    |> Keyword.merge(defaults())
+    defaults()
+    |> Keyword.merge(args)
     |> Keyword.drop(@system_options)
   end
 
