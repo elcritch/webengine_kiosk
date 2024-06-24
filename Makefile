@@ -17,7 +17,7 @@ $(PREFIX) $(BUILD):
 	mkdir -p $@
 
 $(BUILD)/Makefile: $(BUILD) src/kiosk.pro
-	cd $(BUILD) && $(QMAKE) $(SRC_DIR)/src/kiosk.pro
+	cd $(BUILD) && $(QMAKE) -qt=qt5 $(SRC_DIR)/src/kiosk.pro
 
 submake: $(BUILD)/Makefile
 	+$(MAKE) -j3 -C $(BUILD)
